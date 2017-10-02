@@ -15,11 +15,11 @@ def mkdir(ruta):
   except OSError:
     pass
 
-def ommit_nul(word):
+def omit_nul(word):
    word=re.sub(r'[\x00]','', word).strip()
    return word
 
-def ommit_introducing(line):
+def omit_intro(line):
    try:
       line=re.sub(r'[\x00]','', line)
       if line.strip()[0]=='<':
