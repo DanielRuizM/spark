@@ -16,13 +16,10 @@ def mkdir(ruta):
     pass
 
 def ommit_nul(word):
-   #word=bytes(word, 'utf-8').decode('utf-8','ignore')
-      #word=re.sub(r'[^\s\w]', '', word)
    word=re.sub(r'[\x00]','', word).strip()
    return word
 
 def ommit_introducing(line):
-   #print(re.sub(r'[\x00]','', line))
    try:
       line=re.sub(r'[\x00]','', line)
       if line.strip()[0]=='<':
@@ -33,7 +30,6 @@ def ommit_introducing(line):
       return False
 
 def main(sc):
-   
    
    if len(sys.argv)!=3:
       print(''' you have to fill 2 parameters: - Path where you want to store the histogram
@@ -61,7 +57,7 @@ def main(sc):
       count=count+1
 
    words = textRDD.filter(lambda x: ommit_introducing(x)).flatMap(lambda x: x.split(' ')).map(lambda x: (ommit_nul(x),len(str(x).strip())))
-   lenght=words.sortBy(lambda x: x[1],ascending=False).collect()
+   lenght=words.sortBy(lambda x: x[1],ascending=False).take(5)
    print('5 longest words')
    count=0
    for wc in lenght:
@@ -72,7 +68,7 @@ def main(sc):
       count=count+1
 
    lines = textRDD.map(lambda x: (ommit_nul(x),len(str(x).strip())))
-   lenght=lines.sortBy(lambda x: x[1],ascending=False).collect()
+   lenght=lines.sortBy(lambda x: x[1],ascending=False).take(5)
    print('5 longest phrases')
    count=0
    for wc in lenght:
@@ -83,9 +79,8 @@ def main(sc):
       count=count+1
 
    words = textRDD.filter(lambda x: ommit_introducing(x)).flatMap(lambda x: x.split(' ')).map(lambda x: len(str(x).strip())).map(lambda x: (x,1))
-   hist=words.reduceByKey(add).sortBy(lambda x: x[0],ascending=True).collect()
+   hist=words.reduceByKey(add).sortBy(lambda x: x[0],ascending=True).take(5)
 
-   #print('num_letters num_words')
    count=0
    freq=[]
    word_lenght=[]
