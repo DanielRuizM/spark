@@ -45,8 +45,8 @@ def main(sc):
    #filename='path_txt/tragedies/Anthony\ and\ Cleopatra.txt'
    textRDD = sc.textFile(filename)
    
-   words = textRDD.filter(lambda x: ommit_introducing(x)).flatMap(lambda x: x.split(' '))
-   wordcount = words.map(lambda x: (ommit_nul(x), 1)).reduceByKey(add).sortBy(lambda x: x[1],ascending=False).take(5)
+   words = textRDD.filter(lambda x: omit_intro(x)).flatMap(lambda x: x.split(' '))
+   wordcount = words.map(lambda x: (omit_nul(x), 1)).reduceByKey(add).sortBy(lambda x: x[1],ascending=False).take(5)
    count=0
    print('5 most common words')
    for wc in wordcount:
@@ -56,7 +56,7 @@ def main(sc):
          break
       count=count+1
 
-   words = textRDD.filter(lambda x: ommit_introducing(x)).flatMap(lambda x: x.split(' ')).map(lambda x: (ommit_nul(x),len(str(x).strip())))
+   words = textRDD.filter(lambda x: omit_intro(x)).flatMap(lambda x: x.split(' ')).map(lambda x: (omit_nul(x),len(str(x).strip())))
    lenght=words.sortBy(lambda x: x[1],ascending=False).take(5)
    print('5 longest words')
    count=0
@@ -67,7 +67,7 @@ def main(sc):
          break
       count=count+1
 
-   lines = textRDD.map(lambda x: (ommit_nul(x),len(str(x).strip())))
+   lines = textRDD.map(lambda x: (omit_nul(x),len(str(x).strip())))
    lenght=lines.sortBy(lambda x: x[1],ascending=False).take(5)
    print('5 longest phrases')
    count=0
@@ -78,7 +78,7 @@ def main(sc):
          break
       count=count+1
 
-   words = textRDD.filter(lambda x: ommit_introducing(x)).flatMap(lambda x: x.split(' ')).map(lambda x: len(str(x).strip())).map(lambda x: (x,1))
+   words = textRDD.filter(lambda x: omit_intro(x)).flatMap(lambda x: x.split(' ')).map(lambda x: len(str(x).strip())).map(lambda x: (x,1))
    hist=words.reduceByKey(add).sortBy(lambda x: x[0],ascending=True).take(5)
 
    count=0
